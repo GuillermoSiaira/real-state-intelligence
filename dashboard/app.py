@@ -2,7 +2,6 @@
 import pandas as pd
 import plotly.express as px
 
-# Configuración de página
 st.set_page_config(page_title="Real Estate Intelligence", layout="wide")
 
 # --- MODO DEMO: DATOS ESTÁTICOS ---
@@ -42,5 +41,17 @@ with c1:
     st.plotly_chart(fig, use_container_width=True)
 
 with c2:
-    st.subheader("Live Data Feed (Enriched)")
-    st.dataframe(df, use_container_width=True)
+    # --- AQUÍ ESTÁ EL TRUCO VISUAL ---
+    st.subheader("Live Data Feed")
+    
+    # Creamos el interruptor
+    show_raw = st.toggle("👀 Show Raw Data Only (Simulation)", value=False)
+    
+    if show_raw:
+        st.caption("ℹ️ Simulating raw CoStar export (No contact info, No revenue data)")
+        # Mostramos solo la columna de direcciones
+        st.dataframe(df[['Property Address']], use_container_width=True)
+    else:
+        st.caption("✅ Enriched Data (Owner + Financials added)")
+        # Mostramos todo
+        st.dataframe(df, use_container_width=True)
